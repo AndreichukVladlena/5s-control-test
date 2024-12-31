@@ -1,0 +1,44 @@
+.tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 40px;
+    margin-top: 20px;
+  }
+  
+  .tasks-table th,
+  .tasks-table td {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    text-align: left;
+    padding: 5px;
+  }
+  
+  .tasks-table button {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    text-decoration: underline;
+  }
+  
+  .tasks-table th {
+    background-color: #f9f9f9;
+    color: #1a1c21;
+  }
+  
+  @media (max-width: 768px) {
+    .tasks-table {
+      margin-top: 60px;
+      width: 95vw;
+      justify-content: center;
+    }
+  
+    .tasks-table th,
+    .tasks-table td {
+      padding: 2px;
+      font-size: x-small;
+    }
+  
+    .tasks-table button {
+      font-size: xx-small;
+    }
+  }
+  
