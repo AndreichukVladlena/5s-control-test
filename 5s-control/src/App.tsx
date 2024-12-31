@@ -4,6 +4,7 @@ import './App.css';
 import Layout from './Layout';
 import IndexPage from './pages/Index/IndexPage';
 import TasksPage from './pages/Tasks/TasksPage';
+import ContactsPage from './pages/Contacts/ContactsPage';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Layout />} >
           <Route index element={<IndexPage />} />
           <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
         </Route>
     </Routes>
   );
