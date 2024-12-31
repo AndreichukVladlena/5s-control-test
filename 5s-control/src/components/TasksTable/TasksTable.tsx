@@ -4,6 +4,15 @@ import './TasksTable.css';
 
 
 const TasksTable: React.FC<TasksTableProps> = ({ tasks, onEditTask, onDeleteTask }) => {
+  const handleDeleteTask = (taskId: number) => {
+    const confirmDelete = window.confirm(
+      'Вы уверены, что хотите удалить задачу?'
+    );
+    if (confirmDelete) {
+      onDeleteTask(taskId);
+    }
+  };
+
   return (
     <table className="tasks-table">
       <thead>
@@ -24,7 +33,7 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, onEditTask, onDeleteTask
             <td>{task.date}</td>
             <td>
               <button onClick={() => onEditTask(task)}>Редактировать</button>
-              <button onClick={() => onDeleteTask(task.id)}>Удалить</button>
+              <button onClick={() => handleDeleteTask(task.id)}>Удалить</button>
             </td>
           </tr>
         ))}
