@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './TasksForm.css';
-import {Task} from '../../types/index';
+import { Task } from '../../types';
 import TaskModal from '../TaskModal/TaskModal';
-
+import TasksControls from '../TasksControls/TasksControls';
+import TasksTable from '../TasksTable/TasksTable';
 
 const TasksForm: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
-  const [filter, setFilter] = useState<string>(''); 
+  const [filter, setFilter] = useState<string>('');
 
   useEffect(() => {
     const storedTasks = localStorage.getItem('tasks');
@@ -48,11 +49,6 @@ const TasksForm: React.FC = () => {
     }
   };
 
-  const filteredTasks = tasks.filter(
-    (task) => !filter || task.status === filter
-  );
-
-  console.log(filteredTasks);
   const handleExport = () => {
     const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(tasks))}`;
     const downloadAnchor = document.createElement('a');
@@ -61,60 +57,33 @@ const TasksForm: React.FC = () => {
     downloadAnchor.click();
   };
 
+  const filteredTasks = tasks.filter(
+    (task) => !filter || task.status === filter
+  );
+
   return (
     <div className="tasks">
-      <div className="tasks-controls">
-        <button onClick={() => setIsModalOpen(true)}>Добавить задачу</button>
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="">Все</option>
-          <option value="Новая">Новая</option>
-          <option value="В работе">В работе</option>
-          <option value="Завершена">Завершена</option>
-        </select>
-        <button onClick={handleExport}>Экспорт задач</button>
-        <input
-          type="file"
-          accept="application/json"
-          id="file-upload"
-          onChange={handleImport}
-          className="tasks-controls-input"
-        />
-        <label htmlFor="file-upload" className="custom-file-label">
-          Загрузить файл
-        </label>
-
-      </div>
-      <table className="tasks-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Название задачи</th>
-            <th>Статус</th>
-            <th>Дата</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTasks.map((task) => (
-            <tr key={task.id}>
-              <td>{task.id}</td>
-              <td>{task.name}</td>
-              <td>{task.status}</td>
-              <td>{task.date}</td>
-              <td>
-                <button onClick={() => { setCurrentTask(task); setIsModalOpen(true); }}>Редактировать</button>
-                <button onClick={() => deleteTask(task.id)}>Удалить</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TasksControls
+        filter={filter}
+        onFilterChange={setFilter}
+        onExport={handleExport}
+        onImport={handleImport}
+        onAddTask={() => setIsModalOpen(true)}
+      />
+      <TasksTable
+        tasks={filteredTasks}
+        onEditTask={(task) => {
+          setCurrentTask(task);
+          setIsModalOpen(true);
+        }}
+        onDeleteTask={deleteTask}
+      />
       {isModalOpen && (
         <TaskModal
-          onClose={() => { setIsModalOpen(false); setCurrentTask(null); }}
+          onClose={() => {
+            setIsModalOpen(false);
+            setCurrentTask(null);
+          }}
           onSave={(task) => {
             if (currentTask) {
               editTask(task);
